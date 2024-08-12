@@ -6,9 +6,11 @@ public class PlayerAim : MonoBehaviour
     private Camera m_mainCamera;
 
     [SerializeField]
-    private float _aimAngleLimit;
+    private float _aimAngleLimit = 45f;
     [SerializeField]
-    private float _aimRotationSpeed;
+    private float _aimRotationSpeed = 90f;
+    [SerializeField]
+    private float _angleTolerance = 0.1f;
 
     private void Start()
     {
@@ -27,6 +29,7 @@ public class PlayerAim : MonoBehaviour
     private float CalculateAimAngle()
     {
         Vector3 mousePosition = m_mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+
         mousePosition.z = 0f;
 
         Vector2 aimDirection = (mousePosition - transform.position).normalized;
@@ -39,6 +42,11 @@ public class PlayerAim : MonoBehaviour
         float currentAngle = transform.eulerAngles.z;
 
         float angleDifference = Mathf.DeltaAngle(currentAngle, targetAngle);
+
+        if (Mathf.Abs(angleDifference) <= _angleTolerance)
+        {
+            return targetAngle;
+        }
 
         float rotationStep = _aimRotationSpeed * Time.deltaTime;
 
