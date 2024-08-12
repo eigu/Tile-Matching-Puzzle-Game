@@ -19,17 +19,16 @@ public class PlayerAim : MonoBehaviour
 
     private void Update()
     {
-        float targetAngle = CalculateAimAngle();
+        float aimAngle = CalculateAimAngle();
 
-        float clampedAngle = ClampAngle(targetAngle);
+        float clampedAimAngle = ClampAimAngle(aimAngle);
 
-        RotateTowards(clampedAngle);
+        RotateTowards(clampedAimAngle);
     }
 
     private float CalculateAimAngle()
     {
         Vector3 mousePosition = m_mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-
         mousePosition.z = 0f;
 
         Vector2 aimDirection = (mousePosition - transform.position).normalized;
@@ -37,16 +36,13 @@ public class PlayerAim : MonoBehaviour
         return Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg - 90f;
     }
 
-    private float ClampAngle(float targetAngle)
+    private float ClampAimAngle(float targetAngle)
     {
         float currentAngle = transform.eulerAngles.z;
 
         float angleDifference = Mathf.DeltaAngle(currentAngle, targetAngle);
 
-        if (Mathf.Abs(angleDifference) <= _angleTolerance)
-        {
-            return targetAngle;
-        }
+        if (Mathf.Abs(angleDifference) <= _angleTolerance) return targetAngle;
 
         float rotationStep = _aimRotationSpeed * Time.deltaTime;
 
