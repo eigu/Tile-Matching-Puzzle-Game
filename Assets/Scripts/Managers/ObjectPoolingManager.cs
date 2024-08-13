@@ -1,5 +1,5 @@
-using System;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Pool;
 
 public class ObjectPoolingManager : MonoBehaviour
@@ -14,9 +14,7 @@ public class ObjectPoolingManager : MonoBehaviour
     [SerializeField]
     private int _poolMaxSize;
 
-    public event Action<ObjectInstance> OnSpawn;
-    [SerializeField]
-    private Transform _spawnPoint;
+    public UnityEvent<ObjectInstance> OnSpawn;
 
     private void Start()
     {
@@ -40,8 +38,6 @@ public class ObjectPoolingManager : MonoBehaviour
     {
         ObjectInstance pooledObject = Instantiate(_objectPrefab);
 
-        pooledObject.transform.position = _spawnPoint.position;
-        pooledObject.ObjectPoolingManager = this;
         pooledObject.Pool = m_pool;
 
         return pooledObject;

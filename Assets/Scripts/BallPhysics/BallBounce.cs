@@ -8,7 +8,7 @@ public class BallBounce : MonoBehaviour, ICollidable
 
         if (ballMovement != null)
         {
-            ballMovement.Direction = Vector2.Reflect(ballMovement.Direction, collision.contacts[0].normal);
+            //ballMovement.Direction = Vector2.Reflect(ballMovement.Direction, collision.contacts[0].normal);
         }
     }
 }

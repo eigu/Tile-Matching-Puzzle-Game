@@ -1,10 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.GraphicsBuffer;
 
 public class PlayerAim : MonoBehaviour
 {
     private Camera m_mainCamera;
 
+    [SerializeField]
+    private Transform _aimAxis;
     [SerializeField]
     private float _aimAngleLimit = 45f;
     [SerializeField]
@@ -31,14 +34,14 @@ public class PlayerAim : MonoBehaviour
         Vector3 mousePosition = m_mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         mousePosition.z = 0f;
 
-        Vector2 aimDirection = (mousePosition - transform.position).normalized;
+        Vector2 aimDirection = (mousePosition - _aimAxis.position).normalized;
 
         return Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg - 90f;
     }
 
     private float ClampAimAngle(float targetAngle)
     {
-        float currentAngle = transform.eulerAngles.z;
+        float currentAngle = GetCurrentAngle();
 
         float angleDifference = Mathf.DeltaAngle(currentAngle, targetAngle);
 
@@ -53,6 +56,16 @@ public class PlayerAim : MonoBehaviour
 
     private void RotateTowards(float clampedAngle)
     {
-        transform.rotation = Quaternion.Euler(0, 0, clampedAngle);
+        _aimAxis.rotation = Quaternion.Euler(0, 0, clampedAngle);
+    }
+
+    public float GetCurrentAngle()
+    {
+        return _aimAxis.eulerAngles.z;
+    }
+
+    public void Initialize(ObjectInstance instance)
+    {
+        instance.gameObject.transform.rotation = Quaternion.Euler(0, 0, GetCurrentAngle());
     }
 }
