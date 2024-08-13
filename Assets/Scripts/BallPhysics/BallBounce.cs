@@ -4,11 +4,17 @@ public class BallBounce : MonoBehaviour, ICollidable
 {
     public void Collide(Collision2D collision)
     {
-        BallMove ballMovement = collision.gameObject.GetComponent<BallMove>();
+        Debug.Log($"Collided to {collision.collider.tag}");
 
-        if (ballMovement != null)
+        BallMove ballMove = collision.collider.GetComponent<BallMove>();
+
+        if (ballMove != null)
         {
-            //ballMovement.Direction = Vector2.Reflect(ballMovement.Direction, collision.contacts[0].normal);
+            Vector2 normal = collision.GetContact(0).normal;
+
+            //Vector2 newDirection = Vector2.Reflect(ballMove.GetDirection(), normal);
+
+            //ballMove.SetDirection(newDirection);
         }
     }
 }

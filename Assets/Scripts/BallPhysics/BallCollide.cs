@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class BallCollide : MonoBehaviour
 {
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void OnCollisionEnter2D(Collision2D collision)
     {
-        ICollidable collidableObject = collision.gameObject.GetComponent<ICollidable>();
+        ICollidable collidableObject = collision.gameObject.GetComponentInChildren<ICollidable>();
 
         if (collidableObject != null) collidableObject.Collide(collision);
     }
